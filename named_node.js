@@ -27,12 +27,19 @@ class NamedNode extends Named {
                 }
             }
         });
+        
         Object.defineProperty(this,'pos',{
             writable:false,
             value:function(){return this.parent?this.parent.indexOf(this):0;}
         });
     }
-
+    root=function(){
+        var current=this;
+        while(current.parent&&!current.parent.is(this)){
+            current=current.parent;
+        }
+        return current;
+    }
     #childKeyAtIndex = function (pos) {
         var result = undefined;
         if (name_or_pos > -1 && name_or_pos < this.children.size) {

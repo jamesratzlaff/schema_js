@@ -7,4 +7,13 @@ class Schema extends NamedNode{
         })
         delete this.parent;
     }
+    #getOrCreate=function(tableName){
+        var result = this[tableName];
+        if(!result){
+            result = new Table(tableName,this);
+        }
+    }
+    root=function(){
+        return this;
+    }
 }
