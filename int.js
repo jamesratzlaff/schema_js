@@ -28,7 +28,7 @@ class Int extends Number{
         });
     }
     static parse(str){
-        let regx = /[^(]*[(]([^)]*)[)].*)/g
+        let regx = /[^(]*[(]([^)]*)[)].*/g
         let resos = regx.exec(str);
         var precision = null;
         if(resos!=null&&resos.length>0){

@@ -1,5 +1,5 @@
 class VarChar extends String {
-    static #getTruncated(str, maxLen) {
+    static getTruncated(str, maxLen) {
         if (str !== null || str !== undefined) {
             if (!maxLen) {
                 maxLen = Number.MAX_SAFE_INTEGER;
@@ -13,7 +13,7 @@ class VarChar extends String {
         return str;
     }
     constructor(str,maxLen){
-        super(VarChar.#getTruncated(str,maxLen));
+        super(VarChar.getTruncated(str,maxLen));
         if(maxLen===null||maxLen===undefined){
             maxLen=Number.MAX_SAFE_INTEGER;
         }
@@ -29,7 +29,7 @@ class VarChar extends String {
     }
 
     static parse(str){
-        let regx = /[^(]*[(]([^)]*)[)].*)/g
+        let regx = /[^(]*[(]([^)]*)[)].*/g
         let resos = regx.exec(str);
         var val = null;
         if(resos!=null&&resos.length>0){

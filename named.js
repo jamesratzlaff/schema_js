@@ -1,8 +1,8 @@
 class Named {
 
     constructor(named){
-        if(!named){
-            throw("A name for this object must be given");
+        if(named===undefined||named===null){
+            throw "A name for this object must be given";
         }
         Object.defineProperty(this, 'named',{
             writable:false,

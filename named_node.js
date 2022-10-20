@@ -1,29 +1,27 @@
 class NamedNode extends Named {
     constructor(named, parent) {
         super(named);
-        Object.defineProperty(this, '#parent', {
+        Object.defineProperty(this, 'parent', {
             writable: false,
             configurable: true,
             value: parent
         });
-        Object.defineProperty(this, '#children', {
+        Object.defineProperty(this, 'children', {
             writable: false,
             configurable: true,
             value: new Map
         });
-        if (parent && parent.add) {
-            parent.add(this);
-        }
-        Object.defineProperty(this, '#add', {
+
+        Object.defineProperty(this, 'add', {
             writable: false,
             configurable: true,
             value: function (child) {
-                if (this.children && child && this.is(child.parent)) {
+                if (this.children && child) {
                     this.children.set(child.named, child);
-                    Object.defineProperty(this, child.named, {
-                        writable: false,
-                        get: childNamed(child.named)
-                    });
+                    // Object.defineProperty(this, child.named, {
+                    //     writable: false,
+                    //     get: this.#childNamed(child.named)
+                    // });
                 }
             }
         });
@@ -32,6 +30,10 @@ class NamedNode extends Named {
             writable:false,
             value:function(){return this.parent?this.parent.indexOf(this):0;}
         });
+        if (this.parent && this.parent.add) {
+            this.parent.add(this);
+        }
+
     }
     root=function(){
         var current=this;
@@ -80,16 +82,18 @@ class NamedNode extends Named {
         return res;
 
     }
-    #isInRange = function (val) {
-        return val > -1 && nval < this.children.length;
+
+    #isInRange=function(val) {
+        return val > -1 && val < this.children.length;
     }
-    #child = function (name_or_pos) {
+    
+    #child=function(name_or_pos) {
         if (this.children) {
             if (name_or_pos !== undefined && name_or_pos != null) {
                 if (name_or_pos instanceof Number) {
                     if (name_or_pos > -1 && name_or_pos < this.children.length) {
-                        var nerp = this.childKeyAtIndex(name_or_pos);
-                        return this.child(nerp);
+                        var nerp = this.#childKeyAtIndex(name_or_pos);
+                        return this.#child(nerp);
                     } else if (name_or_pos instanceof String) {
                         var resos = this.children.filter(ch => ch.named == name_or_pos);
                         if (resos.length > 0) {
@@ -112,6 +116,24 @@ class NamedNode extends Named {
             }
         }
         return false;
+    }
+
+    toString(){
+        return this.asString(0);
+    }
+
+    asString(indentAmt){
+        if(indentAmt==undefined){
+            indentAmt=0;
+        }
+        var dent = [indentAmt].fill("\t").join("");
+        var strs = [dent+this.named];
+        if(this.children){
+            for(var i in this.children){
+                strs.push(children[i].asString(indentAmt+1));
+            }
+        }
+        return strs.join("\n");
     }
 
 
