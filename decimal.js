@@ -8,7 +8,7 @@ class Decimal extends Int {
             decimalPart=(val).toString().substring(dotIndex+1);
         }
         var asDec = parseFloat("0."+decimalPart);
-        return (iPart+asDec).toFixed(precisionf);
+        return this.parseFloat((iPart+asDec).toFixed(precisionf));
 
     }
     constructor(val, precision, precisionf){
@@ -16,6 +16,11 @@ class Decimal extends Int {
         Object.defineProperty(this,'precisionf',{
             writable:false,
             value:precisionf
+        });
+        Object.defineProperty(this,'tupleValue',{
+            get:function(){
+                return parseFloat(Decimal.toPrecisionF(this.originalValue,this.precision,this.precisionf));
+            }
         });
     }
     static parse(str){

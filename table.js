@@ -20,6 +20,18 @@ class Table extends NamedNode{
             toStore[k]=val.asColumnValue(parts[dex]);
             dex+=1;
         }
+        var self=this;
+        toStore.asTuple=function(){
+            var tuple={};
+            for(var key of self.children.keys()){
+                var val=toStore[key].asTuple();
+                Object.assign(tuple,val);
+            }
+            return tuple;
+        }
         this.rows.push(toStore);
+    }
+    asTuples(){
+        return this.rows.map(row=>row.asTuple());
     }
 }

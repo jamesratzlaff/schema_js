@@ -38,6 +38,18 @@ class Schema extends NamedNode{
         return this;
     }
 
+    
+    store(tablename, delim, strs){
+        if(!Array.isArray(strs)){
+            strs=[strs];
+        }
+        for(var i=0;i<strs.length;i++){
+            var str=strs[i];
+            this[tablename].store(delim,str);
+        }
+        
+    }
+
 
     static parseSchema(delim,name, tables){
         if(tables!==undefined && tables instanceof String){

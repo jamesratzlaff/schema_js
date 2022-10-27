@@ -26,7 +26,14 @@ class Int extends Number{
             writable:false,
             value:precision
         });
+        Object.defineProperty(this,'tupleValue',{
+            configurable:true,
+            get:function(){return parseInt(this.toString(10))}
+        });
+        
     }
+    
+    
     static parse(str){
         let regx = /[^(]*[(]([^)]*)[)].*/g
         let resos = regx.exec(str);
@@ -39,5 +46,6 @@ class Int extends Number{
         }
         return function(i){return new Int(i,precision)};
     }
+
 
 }

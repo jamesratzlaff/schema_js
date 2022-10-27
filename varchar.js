@@ -26,6 +26,11 @@ class VarChar extends String {
             writable:false,
             value:maxLen
         });
+        Object.defineProperty(this,'tupleValue',{
+            get:function(){
+                return this.toString();
+            }
+        });
     }
 
     static parse(str){
