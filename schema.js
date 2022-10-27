@@ -83,6 +83,20 @@ class Schema extends NamedNode{
         if(str.startsWith("float")||str.startsWith("decimal")){
             return Decimal.parse(str);
         }
+        if(str.startsWith("date")){
+            return function(dateStr){return new Date(dateStr)};
+        }
+        if(str.startsWith("bit(")){
+            return function(val){
+                if(val){
+                    val=val.toLowerCase();
+                }
+                if(['1',"t","true"].includes(val)){
+                    return true;
+                }
+                return false;
+            };
+        }
         if(str.startsWith("enum(")){
             str=str.substring("enum(".length);
             str=str.substring(0,str.lastIndexOf(")"));
