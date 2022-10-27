@@ -18,13 +18,15 @@ class NamedNode extends Named {
             value: function (child) {
                 if (this.children && child) {
                     this.children.set(child.named, child);
-                    // Object.defineProperty(this, child.named, {
-                    //     writable: false,
-                    //     get: this.#childNamed(child.named)
-                    // });
+                    Object.defineProperty(this, child.named, {
+                         writable: false,
+                         value: child
+                     });
                 }
             }
         });
+
+
         
         Object.defineProperty(this,'pos',{
             writable:false,
@@ -59,13 +61,13 @@ class NamedNode extends Named {
     indexOf = function (name) {
         var res=-1;
         if (name !== null && name !== undefined) {
-            if ((name instanceof Number) && isInRange(name)) {
+            if ((typeof(name) === "number") && isInRange(name)) {
                 return name;
             }
             if (name instanceof Named) {
                 name = name.named;
             }
-            if(!name instanceof String) {
+            if(!(typeof(name) === "string")) {
                 name=name.toString();
             }
             if(this.children){
@@ -87,18 +89,18 @@ class NamedNode extends Named {
         return val > -1 && val < this.children.length;
     }
     
-    #child=function(name_or_pos) {
+    child=function(name_or_pos) {
         if (this.children) {
             if (name_or_pos !== undefined && name_or_pos != null) {
-                if (name_or_pos instanceof Number) {
+                if (typeof(name_or_pos) == "number") {
                     if (name_or_pos > -1 && name_or_pos < this.children.length) {
                         var nerp = this.#childKeyAtIndex(name_or_pos);
-                        return this.#child(nerp);
-                    } else if (name_or_pos instanceof String) {
-                        var resos = this.children.filter(ch => ch.named == name_or_pos);
-                        if (resos.length > 0) {
-                            return resos[0];
-                        }
+                        return this.child(nerp);
+                    }
+                } else if (typeof(name_or_pos) == "string") {
+                    var resos = Array.from(this.children.values()).filter(ch => ch.named == name_or_pos);
+                    if (resos.length > 0) {
+                        return resos[0];
                     }
                 }
             }
@@ -126,12 +128,15 @@ class NamedNode extends Named {
         if(indentAmt==undefined){
             indentAmt=0;
         }
-        var dent = [indentAmt].fill("\t").join("");
+        var dent = new Array(indentAmt).fill("\t").join("");
         var strs = [dent+this.named];
-        if(this.children){
-            for(var i in this.children){
-                strs.push(children[i].asString(indentAmt+1));
-            }
+        if(this.children&&this.children.size>0){
+            var arr = Array.from(this.children.values());
+            var nDent=indentAmt+1;
+            arr.forEach(c=>strs.push(c.asString(nDent)));
+            // for(var i of this.children.values()){
+            //     strs.push(i.asString(indentAmt+1));
+            // }
         }
         return strs.join("\n");
     }

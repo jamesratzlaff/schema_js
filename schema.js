@@ -26,8 +26,15 @@ class Schema extends NamedNode{
         var tableName=parts[0];
         var columnName=parts[1];
         var columnType=parts[2];
+        var fk;
+        if(parts.length>3){
+            fk=parts[3];
+        }
         var table=this.#getOrCreate(tableName);
         var column=new Column(columnName,table,Schema.getTypeCtor(columnType));
+        if(fk){
+            column.foreignKey=fk;
+        }
         return this;
     }
 
@@ -60,7 +67,7 @@ class Schema extends NamedNode{
         if(str.startsWith("int(")){
             return Int.parse(str);
         }
-        if(str.startsWith("float")){
+        if(str.startsWith("float")||str.startsWith("decimal")){
             return Decimal.parse(str);
         }
     }

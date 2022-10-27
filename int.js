@@ -15,7 +15,7 @@ class Int extends Number{
     }
 
     constructor(val, precision, toPrecisionFunc){
-        super(toPrecisionFunc?toPrecisionFunc(val):function(val){return Int.toPrecision(val,precision)});
+        super(toPrecisionFunc?toPrecisionFunc(val):Int.toPrecision(val,precision));
         precision=(precision!==null&&precision!==undefined)?parseInt(precision):(Number.MAX_SAFE_INTEGER).toString().length;
 
         Object.defineProperty(this,'originalValue',{
@@ -24,7 +24,7 @@ class Int extends Number{
         });
         Object.defineProperty(this,'precision',{
             writable:false,
-            value:maxLen
+            value:precision
         });
     }
     static parse(str){
@@ -37,7 +37,7 @@ class Int extends Number{
                 precision=asNum;
             }
         }
-        return function(i){new Int(i,precision)};
+        return function(i){return new Int(i,precision)};
     }
 
 }

@@ -19,7 +19,7 @@ class Decimal extends Int {
         });
     }
     static parse(str){
-        let regx = /[^(]*[(]([^,]*),([^)]*)[)].*)/g
+        let regx = /[^(]*[(]([^,]*),([^)]*)[)].*/g
         let resos = regx.exec(str);
         var precision = 12;
         var precisionf=2;
@@ -35,6 +35,6 @@ class Decimal extends Int {
             }
         }
         }
-        return function(i){new Decimal(i,precision,precisionf)};
+        return function(i){return new Decimal(i,precision,precisionf)};
     }
 }

@@ -9,5 +9,17 @@ class Table extends NamedNode{
             writable:false,
             value:function(){return this.parent;}
         });
+        this.rows=[];
+    }
+    store(sep, str){
+        var parts = str.split(sep);
+        var dex=0;
+        var toStore={};
+        for(var val of this.children.values()){
+            var k=val.named;
+            toStore[k]=val.asColumnValue(parts[dex]);
+            dex+=1;
+        }
+        this.rows.push(toStore);
     }
 }

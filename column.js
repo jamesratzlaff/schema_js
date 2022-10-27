@@ -15,7 +15,7 @@ class Column extends NamedNode{
         });
         Object.defineProperty(this, 'foreignKey',{
             set:function(columnObj){
-                if(columnObj instanceof String){
+                if(typeof(columnObj) == "string"){
                     var parts=columnObj.split(".");
                     var tableName = parts[0];
                     var columnName=parts[1];
@@ -34,15 +34,17 @@ class Column extends NamedNode{
                 if(this.fkVal==null){
                     return null;
                 }
-                if(this.fkVal instanceof String){
+                if(typeof(this.fkVal) == "string"){
                     this.foreignKey=this.fkVal;
                 }
                 return this.fkVal;
             }    
         });
+        this.asColumnValue=function(val){
+            var value = this.valueOf(val);
+            return new ColumnValue(this, value);
+        }
 
     }
-    asColumnValue=function(val){
-        return new ColumnValue(this, this.valueOf(val));
-    }
+    
 }

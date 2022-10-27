@@ -38,6 +38,6 @@ class VarChar extends String {
                 val=asNum;
             }
         }
-        return function(s){new VarChar(s,val)};
+        return function(s){return new VarChar(s,val)};
     }
 }
