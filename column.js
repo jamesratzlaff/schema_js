@@ -3,10 +3,25 @@ class Column extends NamedNode{
     
     constructor(named,table,type_ctor){
         super(named,table)
+        if(!Array.isArray(type_ctor)){
         Object.defineProperty(this, 'valueOf',{
             writable:false,
             value:type_ctor
         });
+    } else {
+        for(var i=0;i<type_ctor.length;i++){
+            var key = type_ctor[i];
+            this[key]=key;
+        }
+        Object.defineProperty(this, 'valueOf',{
+            writable:false,
+            value:function(v){
+                if(this[v]){
+                    return this[v];
+                }
+            }
+        });
+        }
         Object.defineProperty(this, 'table',{
             writable:false,
             value:function(){

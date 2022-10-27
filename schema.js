@@ -31,7 +31,8 @@ class Schema extends NamedNode{
             fk=parts[3];
         }
         var table=this.#getOrCreate(tableName);
-        var column=new Column(columnName,table,Schema.getTypeCtor(columnType));
+        var ctorOrArr=Schema.getTypeCtor(columnType);
+        var column=new Column(columnName,table,ctorOrArr);
         if(fk){
             column.foreignKey=fk;
         }
@@ -81,6 +82,19 @@ class Schema extends NamedNode{
         }
         if(str.startsWith("float")||str.startsWith("decimal")){
             return Decimal.parse(str);
+        }
+        if(str.startsWith("enum(")){
+            str=str.substring("enum(".length);
+            str=str.substring(0,str.lastIndexOf(")"));
+            var split = str.split(/\s*,\s*/g);
+            for(var i=0;i<split.length;i++){
+                var curr = split[i].trim();
+                if(curr.startsWith("'")||curr.startWith('"')){
+                    curr=curr.substring(1,curr.length-1);
+                }
+                split[i]=curr;
+            }
+            return split;
         }
     }
 }
