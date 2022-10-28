@@ -91,7 +91,7 @@ class Schema extends NamedNode{
                 if(val){
                     val=val.toLowerCase();
                 }
-                if(['1',"t","true","\1"].includes(val)){
+                if(['1',"t","true","\x01"].includes(val)){
                     return true;
                 }
                 return false;
